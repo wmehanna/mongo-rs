@@ -1,0 +1,11 @@
+.dockerignore
+Dockerfile
+
+.git
+.gitignore
+
+.DS_Store
+
+build
+
+.other-scripts
