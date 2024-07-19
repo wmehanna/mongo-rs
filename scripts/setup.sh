@@ -15,28 +15,31 @@ echo "MONGO_PASSWORD: $MONGO_PASSWORD"
 # Initialize MongoDB with replica set and create user
 if [ ! -d "/data/db/.mongodb" ]; then
     echo "Running mongod setup process"
-    mongod --replSet $MONGO_RS --bind_ip_all --fork --logpath /var/log/mongodb.log --keyFile /security/keyfile
+    mongod --replSet $MONGO_RS --bind_ip_all --fork --logpath /var/log/mongodb.log
 
     echo "Waiting for mongod to start"
     sleep 10
 
     echo "Initiating replica set $MONGO_RS"
-    mongosh <<SCRIPT
-rs.initiate({
-    _id: "$MONGO_RS",
-    members: [ { _id: 0, host: "127.0.0.1:27017" } ]
-});
-SCRIPT
+    mongosh --eval "
+        rs.initiate({
+            _id: '$MONGO_RS',
+            members: [ { _id: 0, host: '127.0.0.1:27017' } ]
+        });
+    "
+
+    echo "Waiting for replica set to initialize"
+    sleep 20  # Additional wait time to ensure replica set is fully initialized
 
     echo "Creating user in $MONGO_AUTHDB"
-    mongosh <<SCRIPT
-use $MONGO_AUTHDB;
-db.createUser({
-    user: "$MONGO_USER",
-    pwd: "$MONGO_PASSWORD",
-    roles: [ { role: "root", db: "$MONGO_AUTHDB" } ]
-});
-SCRIPT
+    mongosh --eval "
+        db = db.getSiblingDB('$MONGO_AUTHDB');
+        db.createUser({
+            user: '$MONGO_USER',
+            pwd: '$MONGO_PASSWORD',
+            roles: [ { role: 'root', db: 'admin' } ]
+        });
+    "
 
     touch /data/db/.mongodb
     mongod --shutdown
