@@ -18,7 +18,7 @@ To run the container with default settings:
 docker run -d \
   --name mongo-rs \
   -e MONGO_RS=rs0 \
-  -e MONGO_AUTHDB=admin \
+  -e MONGO_AUTHDB=mydb \
   -e MONGO_USER=root \
   -e MONGO_PASSWORD=password \
   -p 27017:27017 \
@@ -33,7 +33,7 @@ To run the container with a volume to persist data:
 docker run -d \
   --name mongo-rs \
   -e MONGO_RS=rs0 \
-  -e MONGO_AUTHDB=admin \
+  -e MONGO_AUTHDB=mydb \
   -e MONGO_USER=root \
   -e MONGO_PASSWORD=password \
   -p 27017:27017 \
@@ -44,7 +44,7 @@ docker run -d \
 ### Environment Variables
 
 - `MONGO_RS`: The name of the replica set (default: `rs0`)
-- `MONGO_AUTHDB`: The database for authentication (default: `admin`)
+- `MONGO_AUTHDB`: The database for authentication (default: `mydb`)
 - `MONGO_USER`: The username for the root user (default: `root`)
 - `MONGO_PASSWORD`: The password for the root user (default: `password`)
 
@@ -53,7 +53,7 @@ docker run -d \
 Use the following connection string to connect to the MongoDB instance:
 
 ```bash
-mongodb://root:password@<your-ip>:27017/?authSource=admin&directConnection=true
+mongodb://root:password@<your-ip>:27017/mydb?directConnection=true
 ```
 
 ## License

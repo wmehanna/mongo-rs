@@ -6,13 +6,19 @@ MONGO_AUTHDB=${MONGO_AUTHDB:-admin}
 MONGO_USER=${MONGO_USER:-root}
 MONGO_PASSWORD=${MONGO_PASSWORD:-password}
 
+# Debug logs
+echo "MONGO_RS: $MONGO_RS"
+echo "MONGO_AUTHDB: $MONGO_AUTHDB"
+echo "MONGO_USER: $MONGO_USER"
+echo "MONGO_PASSWORD: $MONGO_PASSWORD"
+
 # Initialize MongoDB with replica set and create user
 if [ ! -d "/data/db/.mongodb" ]; then
     echo "Running mongod setup process"
-    mongod --replSet $MONGO_RS --bind_ip_all &
+    mongod --replSet $MONGO_RS --bind_ip_all --fork --logpath /var/log/mongodb.log --keyFile /security/keyfile
 
     echo "Waiting for mongod to start"
-    sleep 5
+    sleep 10
 
     echo "Initiating replica set $MONGO_RS"
     mongosh <<SCRIPT
