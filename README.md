@@ -22,7 +22,7 @@ docker run -d \
   -e MONGO_USER=root \
   -e MONGO_PASSWORD=password \
   -p 27017:27017 \
-  mongo-rs
+  lucidfabrics/mongo-rs
 ```
 
 ### Running the Container with a Volume
@@ -38,7 +38,7 @@ docker run -d \
   -e MONGO_PASSWORD=password \
   -p 27017:27017 \
   -v mongo-data:/data/db \
-  mongo-rs
+  lucidfabrics/mongo-rs
 ```
 
 ### Environment Variables
